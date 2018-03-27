@@ -8,10 +8,23 @@ Notes:
 3. tasklist.sh and process.sh will be rewritten every time you run the script
 
 
+
+Variables:
+c1_folder: folder on the cluster with code. ex: /Users/folder1/
+c2_folder: folder on the cluster with PDB files. ex: /Users/folder2/
+folder1: local folder containing PDB files. ex: /Users/folder3/
+X: number of PDBS to run
+pdb_list.txt: list of PDBS ids. should be stored in same folder as local code
+
+
+
 Steps to set up locally (and then run on cluster):
+
 For initial run:
 1. Install Tesselation package (https://github.com/wackywendell/tess/blob/master/README.rst)
 	pip install --user tess
+2. Transfer volume_10to8_regular_quadrants.cxx to c1_folder on the cluster. Compile:
+	g++ volume_10to8_regular_quadrants.cxx -o vor
 
 For all runs, local tasks:
 1. Download PDB files to folder1
@@ -28,8 +41,7 @@ For all runs, local tasks:
 	- Transfer *.txt files to c2_folder on the cluster
 	- Transfer tasklist.sh to your home directory on the cluster. 
 	- tasklist.sh contains 100 tasks for each PDB. Each will take about 20 minutes to run
-6. Transfer volume_10to8_regular_quadrants.cxx to c1_folder on the cluster. Compile:
-	g++ volume_10to8_regular_quadrants.cxx -o vor
+
 7. Submit tasks to cluster using whatever method you prefer
 8. After the tasks are finished, process by submitting process.sh (should only need 1-5 CPUs)
 	- first need to transfer process_volume_output.m to the cluster
