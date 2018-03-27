@@ -1,3 +1,27 @@
+/************************************************************************************************
+* volume_10to8_regular_quadrants folder PDB_code num_atoms which_run
+*
+* Calculates the volume of each atom in a protein
+*
+* Input:
+* folder: full path to folder with PDB.txt file
+* PDB: 3 letter PDB code
+* num_atoms: number of atoms in file1
+* which_run: index variable. To get accurate surface/core data, run 100 times
+*
+* Functions:
+* void check_quads(float point_x,float point_y,float point_z, float shortest_dist, int quad, int which_quad[],float minX, float minY, float minZ, float maxX, float maxY, float maxZ);
+* int find_quad(int point_x, int point_y, int point_z);
+* void find_min(double x[],double y[],double z[],  int index1[],int num1,double point_x, double point_y, double point_z, double inflated_sum[], double rad_2_sum[], float min_dist[]);
+*
+* Output:
+* PDB_which_run.txt file with the following columns
+*	1: atomic radii
+*	2: 0 for core, 1 for surface
+* 	3: volume of this atom
+* Each row corresponds to a row of PDB.txt
+*************************************************************************************************/
+
 #include <iostream>
 #include <fstream>
 #include <ostream>
@@ -13,21 +37,26 @@ int find_quad(int point_x, int point_y, int point_z);
 void find_min(double x[],double y[],double z[],  int index1[],int num1,double point_x, double point_y, double point_z, double inflated_sum[], double rad_2_sum[], float min_dist[]);
 
 int main(int argc, char **argv){
-	clock_t begin = clock();
-	// ./volume_c pdb_name num_residues
-	if (argc < 4){
+	if (argc < 5){
 		cout << " Invalid input " << endl ;
 		cout << endl;
 		return 2;
 		
 	} //check args
 	 
+	
+	//Parse folder name
+	char *folder_short = 0;
+	folder_short = argv[1];
+	
 	//Parse file name
 	char *file_name_short = 0;
-	file_name_short = argv[1];
+	file_name_short = argv[2];
 	char file_name[10];
 	strcpy(file_name, file_name_short);
 	cout << file_name_short << endl;
+	
+	
 	
 	//Parse number of residues
 	int size_pdb = atoi(argv[2]);
@@ -72,17 +101,13 @@ int main(int argc, char **argv){
 	}
 	
 	
-
 	// Open file to read from
 	char name_2[150] = "";
-	strcat(name_2, file_name_short);
-	
-	cout << name_2 << endl;
+	strcat(name_2, folder);
+	strcat(name_2, file_name_short);	
 	strcat(name_2,  ".txt");
-	cout << name_2 << endl;
 	ifs.open(name_2);
-	cout << size_pdb << endl;
-	cout << ifs.good() << endl;
+
 	//Read each line and store in x, y, z
 	//Also find min and max for each dimension
 	for(int atoms = 0 ; atoms < size_pdb; atoms ++){
@@ -232,12 +257,12 @@ int main(int argc, char **argv){
 	rangeZ = maxZ-minZ;
 	double box_vol = rangeX*rangeY*rangeZ;
 	cout << rangeX << " " << rangeY << " " << rangeZ << " range" << endl;
-	double point_x, point_y, point_z; //random points in box
-	double dist_x, dist_y, dist_z; //Distance between random point and an atom in x, y, z
-	bool in_sphere = false; //random point is in a sphere
-	bool in_range = false; // random point is within probe of sphere surface
-	double distemp_old = 100000.1; // distance between random point and atom
-	int loc_min = 0; //location of atom that point is closest to
+	double point_x, point_y, point_z; 					//random points in box
+	double dist_x, dist_y, dist_z; 						//Distance between random point and an atom in x, y, z
+	bool in_sphere = false; 						//random point is in a sphere
+	bool in_range = false; 							// random point is within probe of sphere surface
+	double distemp_old = 100000.1; 						// distance between random point and atom
+	int loc_min = 0; 							//location of atom that point is closest to
 	double clash_min = 100.1;
 	int clash_loc = 0;
 	double dt, ci, cl;
@@ -257,8 +282,7 @@ int main(int argc, char **argv){
 		//Figure out what quadrant you are in
 		quad = 0;
 		quad = find_quad(point_x, point_y, point_z);
-	// Change to pass combined data for all things it could be near
-	
+		// Change to pass combined data for all things it could be near
 	
 		switch (quad){
 			case 1:
@@ -342,9 +366,8 @@ int main(int argc, char **argv){
 				}
 		
 		}
-		//cout << min_dist[4] << " closest dist" << endl;
+		
 	 	// if the point wasn't within 1.5A of any atoms, it is an edge
-	 	//cout << static_cast<int>(min_dist[1]) << " dist1" << endl;
 		 if (min_dist[0]<0) {
 		 	if (min_dist[1] >= 0) {
 				is_edge[static_cast<int>(min_dist[1])] = true;
@@ -362,16 +385,10 @@ cout <<"finished running" << endl;
 ofstream outs1; //stream to save to
 
 char name_3[150] = "";
-//strcat(name_3, "/Users/jennifergaines/Documents/summer2013/Minimum_energy_algorithm/Core_mutations/");
-//strcat(name_3, "/home/fas/ohern/jcg72/volumes/Mutations/");
 strcat(name_3, file_name_short);
-//strcat(name_3, "1tsr_h.pdb");
 strcat(name_3, item_num);
 strcat(name_3, ".txt");
-cout << name_3 << endl;
 outs1.open(name_3);
-cout << outs1.is_open() << endl;
-//cout << name_3 << endl;
 if (outs1.is_open()) {
 	cout << name_3 << endl;
 	for (int i = 0; i < size_pdb; i ++){
@@ -384,10 +401,14 @@ else {
 	cout << "problem with file" << endl;
 }
 
-clock_t end = clock();
-  double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-  cout << "time: " << elapsed_secs << endl;
 }
+
+
+/**********************************************************************
+* int find_quad(point_x, point_y, point_z)
+* Determines what quadrant a given point is in
+* Returns value from 1 to 8 depending on the quadrant
+**********************************************************************/
 
 int find_quad(int point_x, int point_y, int point_z){
 	int quad = 0;
@@ -422,8 +443,30 @@ int find_quad(int point_x, int point_y, int point_z){
 	return quad;
 }
 
+
+
+/**********************************************************************
+* int find_min(x, y, z, index1, num1, point_x, point_y, point_z, inflated_sum, rad_2_sum, min_dist)
+* Finds the minimum distance between random point [point_x, point_y, point_z] and all other points in the quadrant containing this point
+* 
+* Input:
+* x,y,z : arrays of the coordiantes of all points in the protein
+* index1: Index of all atoms within the given quadrant (cooresponds to rows in x,y,z)
+* num1: number of atoms in this quadrant
+* point_x, point_y, point_z : random point being used
+* inflated_sum: array of (radii of atoms + probe_size)^2
+* rad_2_sum: (radii)^2
+* min_dist: array that will be used to return results
+*	min_dist[0] : 1 if point was inside any atoms, 0 if it wasn't
+*	min_dist[1]: index of closest atom
+*	min_dist[2]: 1 if point was inside an inflated atom, 0 if it wasn't
+*	min_dist[3]: index of atom that point is inside
+*	min_dist[4]: distance^2 to atom in min_dist[1]
+*	min_dist[5]: distance^2 to atom in min_dist[3]
+* 
+**********************************************************************/
+
 void find_min(double x[],double y[],double z[], int index1[],int num1,double point_x, double point_y, double point_z, double inflated_sum[], double rad_2_sum[], float min_dist[]){
-	//float min_dist[5];
 	bool in_sphere = false; //random point is in a sphere
 	bool in_range = false; // random point is within probe of sphere surface
 	double distemp_old = 100000.1; // distance between random point and atom
@@ -485,7 +528,20 @@ void find_min(double x[],double y[],double z[], int index1[],int num1,double poi
 	 }
 	 
 	 
-	 
+/**********************************************************************
+* int check_quads(point_x, point_y, point_z, shortest_dist, quad, which_run, minX, minY, minZ, maxX, maxY, max)
+* Checks to see if an atom in a different quadrant might be closer to the random point than one in its own quadrant. Does this by 
+* calculating the distance to the plane between quadrants
+* 
+* Input:
+* point_x, point_y, point_z : random point being used
+* shortest_dist: the distance^2 between the random point and the closest atom in its quadrant
+* quad: which quadrant the random point is in
+* which_run: array of which quadrants to be run
+* minX, minY, minZ : minimium of atomic coordinates of the protein
+* maxX, maxY, maxZ : maximum of atomic coordinates of the protein
+* 
+**********************************************************************/	 
 void  check_quads(float point_x,float point_y,float point_z, float shortest_dist, int quad, int which_run[], float minX, float minY, float minZ, float maxX, float maxY, float maxZ){
 	for (int i = 0; i< 8; i++){
 		which_run[i] = -1;
