@@ -1,3 +1,20 @@
+#------------------------------------------------------------------------
+# preprocess_pdb_parameters folder_name file1 num_pdb
+# 
+# Input:
+# folder_name: full path to folder with PDB data. ex) /Users/folder1/
+# file1: full path to file with list of PDB codes. ex) /Users/folder2/names.txt
+# num_pdb: number of PDBS to run
+#
+# Output:
+# *.txt : file for each PDB with coordiantes and radii
+#
+# Notes:
+# To change atom sizes, change asizes_7.csv
+# Code expects *_H.pdb file for each PDB in file1
+#------------------------------------------------------------------------
+
+
 #! /Users/jennifergaines/anaconda/bin/python
 #/Library/Frameworks/Python.framework/Versions/2.7/bin/python
 #import matplotlib.pyplot as plt
@@ -56,7 +73,6 @@ def save_pdb_as_text(struc, size_func = get_size):
 	upperlim = tuple([maxcoord*2]*3)
 
 
-	#f = open('/Users/jennifergaines/Documents/Protherm/all_pdb/' + file_name + '.txt', 'w')
 	f = open(folder_name+file_name + '.txt', 'w')
 
 	for i in range(0, len(sizes)) :
@@ -79,7 +95,6 @@ def save_pdb_as_text(struc, size_func = get_size):
 ############################	
 
 import sys
-print sys.argv[1:]
 
 hiq = open(sys.argv[2], 'r')
 parser = pdb.PDBParser()
@@ -88,9 +103,7 @@ folder_name = str(sys.argv[1])
 # The first structure
 for hiq_files in range(0,int(sys.argv[3])):
 	file_name = hiq.readline().rstrip()
-	file_name = file_name.lower()
-	print folder_name+file_name+"_H.pdb"
-	
+	file_name = file_name.lower()	
 	spdb = parser.get_structure("new_file", folder_name+file_name+"_H.pdb")
 	model =  spdb[0]
 	chain = model
