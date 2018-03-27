@@ -1,8 +1,20 @@
+#--------------------------------------------------------------------------------
+# make_ordered_pdb.py folder_name file1 num_pdb
+# Input:
+# folder_name: full path to folder containing PDB files. ex) /Users/folder1/
+# file1: file containing list of all PDB codes. Must be full path ex) /Users/folder1/data.txt
+# num_pdb: The number of PDBs to run
+# 
+# Output:
+# *_ordered.pdb: a file for each PDB with disordered atoms and heteroatoms removed
+#--------------------------------------------------------------------------------
+
 #! /Users/jennifergaines/anaconda/bin/python
 from Bio.PDB import*
 import Bio.PDB as pdb
 import numpy as np
 
+#Determines if atom is disordered or not
 class NotDisordered(Select):
 	def accept_atom(self, atom):
 		if (not atom.is_disordered()) or atom.get_altloc() == 'A':
@@ -13,19 +25,18 @@ class NotDisordered(Select):
 			return False
 
 
+#Determines if atom is heteroatom or not		
 class NonHetSelect(Select):
     def accept_residue(self, residue):
         return 1 if residue.id[0] == " " else 0				
 
 import sys
-print sys.argv[1:]
-
 hiq = open(sys.argv[2], 'r')
 		
 parser=PDBParser()
 folder_name = str(sys.argv[1])
 
-# The first structure
+# Loop over all PDBS and save ordered file
 for hiq_files in range(0,int(sys.argv[3])):
 	file_name = hiq.readline().rstrip()
 	s = parser.get_structure("my_pdb", folder_name + file_name + ".pdb")
