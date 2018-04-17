@@ -24,11 +24,9 @@ def find_overlaps(xyzarr, sizes, atoms):
 	d_over = 0
 	s_over = 0
 	print(len(sizes))
-	print(xyzarr[0])
-	print(xyzarr[1])
+	
 	for i in range(0, len(sizes)):
-		print(atoms[i])
-		print(s_over)
+		
 		for j in range(i+1, len(sizes)):
 			print(atoms[j].parent)
 			dist1 = xyzarr[i] - xyzarr[j]
