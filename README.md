@@ -30,7 +30,8 @@ For all runs, local tasks:
 	- c2_folder: full path to cluster folder that will contain PDB data
 5. Step 4 will produce tasklist.sh as well as *_H.pdb, *.txt and *_vor.txt files for each PDB
 	- Transfer *.txt files to c2_folder on the cluster
-	- Transfer tasklist.sh to your home directory on the cluster. 
+	- Transfer process_volume_output.m to c1_folder on the cluster
+	- Transfer tasklist.sh and process.sh to your home directory on the cluster. 
 	- tasklist.sh contains 100 tasks for each PDB. Each will take about 20 minutes to run
 6. Transfer volume_10to8_regular_quadrants.cxx to c1_folder on the cluster. Compile:  
 	g++ volume_10to8_regular_quadrants.cxx -o vor
@@ -45,7 +46,6 @@ For all runs, local tasks:
 If the last lines are full of 0s, you have a path error
 
 8. After the tasks are finished, process by submitting process.sh (should only need 1-5 CPUs)  
-	- first need to transfer process_volume_output.m to the cluster
 	- End result will be *_vol.txt file for each PDB
 	- If the output looks good, you can delete the other 100 files created for each PDB
 9. To calculate packing fraction, *_vor.txt has the voronoi volume and *_vol.txt has the actual volume
