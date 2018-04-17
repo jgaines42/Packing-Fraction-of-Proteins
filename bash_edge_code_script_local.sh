@@ -71,7 +71,7 @@ while read -r line
 			done
 	done<$file1
 
-Create processing tasks
+#Create processing tasks
 while read -r line
 	do
 		run_loop=1
