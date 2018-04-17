@@ -9,6 +9,7 @@ Notes:
 2. If errors occur during preprocessing, check for locations in the PDB where the columns run together
 	This typically occurs between atom type and res name when their is a B type (BASP, etc)
 3. tasklist.sh and process.sh will be rewritten every time you run the script
+4. For all folders or paths, please include / at end 
 
 
 Steps to set up locally (and then run on cluster):
