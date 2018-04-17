@@ -46,3 +46,12 @@ The following files will also be created and can be deleted after the bash scrip
  *ordered1.pdb  
  *ordered2.pdb  
  *noH.pdb
+ 
+# Please cite the following papers 
+
+For adding Hydrogen atoms: Word, et al. (1999) "Asparagine and glutamine: using hydrogen atom contacts in the choice of sidechain amide orientation" J. Mol. Biol. 285, 1735-1747.   
+Website: http://kinemage.biochem.duke.edu/software/reduce.php
+
+For calcualting packing fraction of proteins: Gaines, et al. (2016) "Random close packing in protein cores" PRE. 93, 032415.
+
+
