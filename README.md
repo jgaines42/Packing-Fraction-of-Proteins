@@ -34,7 +34,16 @@ For all runs, local tasks:
 	- tasklist.sh contains 100 tasks for each PDB. Each will take about 20 minutes to run
 6. Transfer volume_10to8_regular_quadrants.cxx to c1_folder on the cluster. Compile:  
 	g++ volume_10to8_regular_quadrants.cxx -o vor
-7. Submit tasks to cluster using whatever method you prefer
+7. Submit tasks to cluster using whatever method you prefer. Output of cluster run should start with lines that look like this  
+`/ysm-gpfs/home/jcg72/vor_test_PDB/253l`  
+`/ysm-gpfs/home/jcg72/vor_test_PDB/253l`  
+`/ysm-gpfs/home/jcg72/vor_test_PDB/253l.txt`  
+`2642`  
+`1`  
+`NMET11.336.643-24.8628.89`  
+`54.818 53.642 63.55 range`  
+If the last lines are full of 0s, you have a path error
+
 8. After the tasks are finished, process by submitting process.sh (should only need 1-5 CPUs)  
 	- first need to transfer process_volume_output.m to the cluster
 	- End result will be *_vol.txt file for each PDB
