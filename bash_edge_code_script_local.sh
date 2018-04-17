@@ -35,7 +35,8 @@ space=" "
 python make_ordered_pdb.py $folder_name $file1 $num_pdb
 
 echo $file1
- while read -r line
+
+ while IFS='' read -r line || [[ -n "$line" ]];
 	do
 		run_loop=1
 		echo $line
@@ -46,7 +47,7 @@ echo $file1
 
 python preprocess_pdb_parameters.py $folder_name $file1 $num_pdb
 
-while read -r line
+while IFS='' read -r line || [[ -n "$line" ]];
 	do
 		run_loop=1
 		echo $line
@@ -72,7 +73,7 @@ while read -r line
 	done<$file1
 
 #Create processing tasks
-while read -r line
+while IFS='' read -r line || [[ -n "$line" ]];
 	do
 		run_loop=1
 		echo $line
@@ -83,7 +84,7 @@ while read -r line
 		
 		echo -n "source ~/.bashrc; cd " >> $file3
 		echo -n $cluster_folder >> $file3
-		echo -n '; matlab -nosplash -nodisplay -nojvm -r "process_volume_output(' >> $file3
+		echo -n '; module load MATLAB/2016b; matlab -nosplash -nodisplay -nojvm -r "process_volume_output(' >> $file3
 		echo -n "'" >> $file3
 		echo -n $line >> $file3
 		echo -n "'" >> $file3
