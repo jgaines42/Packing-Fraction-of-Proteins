@@ -155,7 +155,7 @@ for hiq_files in range(0,int(sys.argv[3])):
 
 	core, edge, near_edge_res = get_core(atoms, cntr)
 
-	f = open(sys.argv[1] + file_name + '_vor_extended4.txt', 'w')
+	f = open(sys.argv[1] + file_name + '_vor.txt', 'w')
 		#if ends in 1, then it is just neighbors of the sidechain
 	#if doesn't end in one, then it is neighbors of entire residue
 
