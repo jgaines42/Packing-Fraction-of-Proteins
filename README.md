@@ -11,19 +11,19 @@ Notes:
 3. tasklist.sh and process.sh will be rewritten every time you run the script
 4. For all folders or paths, please include / at end 
 5. If you just need actual volumes of atoms, not surface/core designation, you can change `while [ $run_loop -le 100 ]` (line 44) to be `while [ $run_loop -le 20 ]`. This will run 20 jobs per protein instead of 100
-6. Yoou must run download_preprocess_pdb.py to add hydrogen atoms
+6. You must run `download_preprocess_pdb.py` to add hydrogen atoms
 
 Steps to set up locally (and then run on cluster):
 For initial run:
 1. Install Tesselation package (https://github.com/wackywendell/tess/blob/master/README.rst)  
-	pip install --user tess
+	`pip install --user tess`
 
 For all runs, local tasks:
 1. Download PDB files to folder1 and create list of PDB codes, 1 per row:
 2. Run download_preprocess_pdb.py to add hydrogen atoms
 3. Make sure that preprocess_pdb_parameters.py will use the correct atom sizes
 4. Run bash_edge_code_script_local.sh  
-	bash bash_edge_code_script_local.sh pdb_list.txt folder1 X c1_folder c2_folder  
+	`bash bash_edge_code_script_local.sh pdb_list.txt folder1 X c1_folder c2_folder` 
 	- pdb_list.txt: list of PDB codes, in same folder as this code
 	- folder1: folder containing PDBs
 	- X: replace by integer stating number of PDBS in PDB file list
@@ -35,7 +35,7 @@ For all runs, local tasks:
 	- Transfer tasklist.sh and process.sh to your home directory on the cluster. 
 	- tasklist.sh contains 100 tasks for each PDB. Each will take about 20 minutes to run
 6. Transfer volume_10to8_regular_quadrants.cxx to c1_folder on the cluster. Compile:  
-	g++ volume_10to8_regular_quadrants.cxx -o vor
+	`g++ volume_10to8_regular_quadrants.cxx -o vor`
 7. Submit tasks to cluster using whatever method you prefer. Output of cluster run should start with lines that look like this  
 `/ysm-gpfs/home/jcg72/vor_test_PDB/253l`  
 `/ysm-gpfs/home/jcg72/vor_test_PDB/253l`  
@@ -52,11 +52,6 @@ If the last lines are full of 0s, you have a path error
 9. To calculate packing fraction, *_vor.txt has the voronoi volume and *_vol.txt has the actual volume
 	- column 1 in *_vol.txt is 1 if the atom is solvent exposed
 
-The following files will also be created and can be deleted after the bash script finishes:  
- *ordered.pdb  
- *ordered1.pdb  
- *ordered2.pdb  
- *noH.pdb
  
 # Please cite the following papers 
 
