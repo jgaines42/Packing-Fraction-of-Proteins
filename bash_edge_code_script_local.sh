@@ -6,47 +6,32 @@
 # 3. Number of pdbs to run
 
 # Ouput:
-# pdb file with hydrogen for each
-# .txt file for each
+# .txt file for each protein
 # Task list for ./vor tasks
 
 # Note:
 # All pdb files must already be in the folder
+# You must run download_preprocess_pdb.py first to remove heteroatoms and add hydrogens to the proteins
 
 #!/bin/bash 
 rm tasklist.sh
 rm process.sh
 
-file1=$1 			#File containing list of PBDB codes
+file1=$1 		#File containing list of PBDB codes
 file2="tasklist.sh"
 folder_name=$2		#Folder containing PDB files
-num_pdb=$3			#Number of PDB to run
+num_pdb=$3		#Number of PDB to run
 cluster_folder=$4	#Folder on cluster where code will be stored
 cluster_data=$5		#Folder on cluster where PDBs and output will be
 file3="process.sh"
 
-file_ending1=".pdb"
-file_ending2="_H.pdb"
-file_ending3="_noH.pdb"
 file_ending4=".txt"
-file_ending5="_ordered.pdb"
 space=" "
 
-python make_ordered_pdb.py $folder_name $file1 $num_pdb
-
-echo $file1
-
- while IFS='' read -r line || [[ -n "$line" ]];
-	do
-		run_loop=1
-		echo $line
-		line=$(echo "$line" | tr '[:upper:]' '[:lower:]')
-		./reduce -Trim -quiet $folder_name$line$file_ending5>$folder_name$line$file_ending3
-		./reduce -quiet $folder_name$line$file_ending3>$folder_name$line$file_ending2
-	done<$file1
-
+# Create text files for the proteins
 python preprocess_pdb_parameters.py $folder_name $file1 $num_pdb
 
+# Make task list for getting atomic volumes and surface/core designation
 while IFS='' read -r line || [[ -n "$line" ]];
 	do
 		run_loop=1
@@ -98,4 +83,5 @@ while IFS='' read -r line || [[ -n "$line" ]];
 
 	done<$file1
 
+#run voronoi calculations
 python vor_size.py $folder_name $file1 $num_pdb
