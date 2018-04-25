@@ -10,7 +10,8 @@ Notes:
 	This typically occurs between atom type and res name when their is a B type (BASP, etc)
 3. tasklist.sh and process.sh will be rewritten every time you run the script
 4. For all folders or paths, please include / at end 
-
+5. If you just need actual volumes of atoms, not surface/core designation, you can change `while [ $run_loop -le 100 ]` (line 44) to be `while [ $run_loop -le 20 ]`. This will run 20 jobs per protein instead of 100
+6. Yoou must run download_preprocess_pdb.py to add hydrogen atoms
 
 Steps to set up locally (and then run on cluster):
 For initial run:
@@ -18,8 +19,8 @@ For initial run:
 	pip install --user tess
 
 For all runs, local tasks:
-1. Download PDB files to folder1
-2. Create list of PDB codes, 1 per row: pdb_list.txt, stored in same folder as this code
+1. Download PDB files to folder1 and create list of PDB codes, 1 per row:
+2. Run download_preprocess_pdb.py to add hydrogen atoms
 3. Make sure that preprocess_pdb_parameters.py will use the correct atom sizes
 4. Run bash_edge_code_script_local.sh  
 	bash bash_edge_code_script_local.sh pdb_list.txt folder1 X c1_folder c2_folder  
@@ -62,6 +63,6 @@ The following files will also be created and can be deleted after the bash scrip
 For adding Hydrogen atoms: Word, et al. (1999) "Asparagine and glutamine: using hydrogen atom contacts in the choice of sidechain amide orientation" J. Mol. Biol. 285, 1735-1747.   
 Website: http://kinemage.biochem.duke.edu/software/reduce.php
 
-For calcualting packing fraction of proteins: Gaines, et al. (2016) "Random close packing in protein cores" PRE. 93, 032415.
+For calcualting packing fraction of proteins: Gaines, et al. (2016) "Random close packing in protein cores" PRE. 93, 032415. and  Rycroft. (2009) "Voro++: A three-dimensional Voronoi cell library in C++" Chaos 19, 041111.
 
 
